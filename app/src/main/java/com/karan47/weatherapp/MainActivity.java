@@ -1,6 +1,8 @@
 package com.karan47.weatherapp;
 
 import android.os.AsyncTask;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Constraints;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -52,46 +54,26 @@ public class MainActivity extends AppCompatActivity {
                 .setEnvironment(SessionConfiguration.Environment.PRODUCTION).build();
         UberSdk.initialize(config);
         RideRequestButton requestButton=new RideRequestButton(MainActivity.this);
-        RelativeLayout layout =new RelativeLayout(this);
+        ConstraintLayout layout =(ConstraintLayout)findViewById(R.id.mainact);
         layout.addView(requestButton);
-
 
 
         RideParameters rideParams = new RideParameters.Builder()
                 // Optional product_id from /v1/products endpoint (e.g. UberX). If not provided, most cost-efficient product will be used
-                .setProductId("a1111c8c-c720-46c3-8534-2fcdd730040d")
+             //   .setProductId("a1111c8c-c720-46c3-8534-2fcdd730040d")
                 // Required for price estimates; lat (Double), lng (Double), nickname (String), formatted address (String) of dropoff location
                 .setDropoffLocation(
-                        30.9022866, 75.8201693, "drop", "dest")
+                        30.902866, 75.8201693, "Destination", "")
                 // Required for pickup estimates; lat (Double), lng (Double), nickname (String), formatted address (String) of pickup location
-                .setPickupLocation(30.9141552, 75.8106216, "Myloc", "pickup")
+                .setPickupLocation(30.9141552, 75.8106216, "Pickup", "")
                 .build();
 // set parameters for the RideRequestButton instance
         requestButton.setRideParameters(rideParams);
 
         ServerTokenSession session = new ServerTokenSession(config);
         requestButton.setSession(session);
-
         requestButton.loadRideInformation();
 
-        RideRequestButtonCallback callback = new RideRequestButtonCallback() {
-
-            @Override
-            public void onRideInformationLoaded() {
-                // react to the displayed estimates
-            }
-
-            @Override
-            public void onError(ApiError apiError) {
-                // API error details: /docs/riders/references/api#section-errors
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                // Unexpected error, very likely an IOException
-            }
-        };
-        requestButton.setCallback(callback);
 
     }
 
